@@ -6,7 +6,7 @@ export const EVAL_WEIGHTS = {
 
 export const EASY = 2;
 export const MEDIUM = 5;
-export const HARD = 8;
+export const HARD = 7;
 
-export const MAX_VALUE = Number.POSITIVE_INFINITY;
-export const MIN_VALUE = Number.NEGATIVE_INFINITY;
+export const MAX_VALUE = Number.MAX_VALUE;
+export const MIN_VALUE = -Number.MAX_VALUE;

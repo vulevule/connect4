@@ -31,6 +31,20 @@ table {
   transition: background-color 0.5s, color 0.5s;
 }
 
+.tableContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tableLoading {
+  opacity: 0.3;
+}
+
+.table {
+  opacity: 1;
+}
+
 .cell {
   height: 70px;
   width: 70px;

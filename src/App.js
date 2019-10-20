@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import ClipLoader from "react-spinners/ClipLoader";
 import {
   ToastsContainer,
   ToastsContainerPosition,
@@ -14,7 +15,6 @@ export default class App extends Component {
     super(props);
 
     this.state = {
-      mode: "manual",
       width: 6,
       heigth: 6,
       player1: 1,
@@ -23,8 +23,6 @@ export default class App extends Component {
       board: [],
       gameOver: false,
       message: "",
-      bestMove: null,
-      thinking: false,
       depth: 2
     };
 
@@ -53,14 +51,13 @@ export default class App extends Component {
       board,
       currentPlayer: initialPlayer,
       gameOver: false,
-      message: "",
-      bestMove: null
+      message: ""
     });
 
     if (initialPlayer === player2) {
       setTimeout(() => {
         let [board, newPlayer] = this.play(
-          Math.floor(width / 2),
+          Math.floor(width / 2) - Math.round(Math.random()),
           initialPlayer
         );
         this.setState({ board, currentPlayer: newPlayer });
@@ -78,7 +75,6 @@ export default class App extends Component {
     if (currentPlayer === this.state.player2) {
       let { depth, width } = this.state;
 
-      this.setState({ thinking: true });
       let solver = new Solver(width);
 
       let bestMove = solver.solve(clone(board), currentPlayer, depth);
@@ -121,7 +117,7 @@ export default class App extends Component {
   };
 
   play = (c, currentPlayer = this.state.currentPlayer) => {
-    let { board, heigth } = this.state;
+    let { board, heigth, player1, player2 } = this.state;
     let newPlayer = -currentPlayer;
 
     if (playable(c, board)) {
@@ -135,20 +131,22 @@ export default class App extends Component {
 
       // Check status of board
       let result = checkAll(board);
-      if (result === this.state.player1) {
+      if (result === player1) {
         this.setState({
           board,
-          gameOver: true
+          gameOver: true,
+          currentPlayer: null
         });
         ToastsStore.success("You won!");
-      } else if (result === this.state.player2) {
+      } else if (result === player2) {
         this.setState({
           board,
-          gameOver: true
+          gameOver: true,
+          currentPlayer: null
         });
         ToastsStore.error("You lost!");
       } else if (result === "draw") {
-        this.setState({ board, gameOver: true });
+        this.setState({ board, gameOver: true, currentPlayer: null });
         ToastsStore.warning("Draw game.");
       } else {
         this.setState({ board, currentPlayer: newPlayer });
@@ -160,7 +158,7 @@ export default class App extends Component {
       return [null, null];
     }
 
-    return [board, newPlayer];
+    return [null, null];
   };
 
   render = () => {
@@ -170,7 +168,8 @@ export default class App extends Component {
       gameOver,
       depth,
       currentPlayer,
-      player1
+      player1,
+      player2
     } = this.state;
     return (
       <div>
@@ -214,21 +213,25 @@ export default class App extends Component {
           New Game
         </div>
 
-        <table>
-          <thead></thead>
-          <tbody>
-            {board.map((row, i) => (
-              <Row key={i} row={row} play={this.playHuman} />
-            ))}
-            {/* <tr>
-              {[...Array(width).keys()].map(e => (
-                <td align="center" key={e}>
-                  {e + 1}
-                </td>
+        <div className="tableContainer">
+          <ClipLoader
+            css={"position: absolute;"}
+            sizeUnit={"px"}
+            size={150}
+            color={"#123abc"}
+            loading={currentPlayer === player2}
+          />
+          <table
+            className={currentPlayer === player2 ? "tableLoading" : "table"}
+          >
+            <thead></thead>
+            <tbody>
+              {board.map((row, i) => (
+                <Row key={i} row={row} play={this.playHuman} />
               ))}
-            </tr> */}
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
 
         <p className="message">
           {gameOver

@@ -1,6 +1,6 @@
 import { EVAL_WEIGHTS, MAX_VALUE, MIN_VALUE } from "../consts/Consts";
-import Position from "./Position";
 import { checkDraw, clone, evaluationCheck, playable } from "../utils/Utils";
+import Position from "./Position";
 
 export default class Solver {
   constructor(width) {
@@ -283,7 +283,6 @@ export default class Solver {
   };
 
   solve = (board, currentPlayer, depth, type = 1) => {
-    //console.log("Intro: ", board);
     let position = new Position(board, currentPlayer);
     if (type === 1) {
       return this.negamaxAB(
