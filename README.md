@@ -13,13 +13,13 @@ Application randomly selects first player (human or AI) and depending on that, a
 
 ## Algorithm
 
-Application uses Negamax version of Minimax algorithm with Alpha-Beta prunning for calculating next best move depending on board's previous state and current player. Algorithm produces a **_tree_** containing all game states as a tree nodes. Every node has it's own value, representing distance to victory. The bigger the value, the better state will be for current player. Algorithm searches through the tree to find the best victory path.
+Application uses Negamax version of Minimax algorithm with Alpha-Beta prunning for calculating next best move depending on boards previous state and current player. Algorithm produces a **_tree_** containing all game states as the tree nodes. Every node has its own value, representing distance to victory. The bigger the value, the better state will be for current player. Algorithm searches through the tree to find the best victory path.
 
-Since the total number of all possible game states produces enourmous computational cost, evaluation function is added to calculate (estimate) next state's value under the specified depth of search.  
-This is typical _performance vs. computational cost trade-off_, so optimal search depth for Connect 4 game would be **5**, since most human players usually think 5 moves in advance. This parameter can be set in game complexity: _Easy - 2, Medium - 5, Hard - 8_.  
+Since the total number of all possible game states produces enormous computational cost, evaluation function is added to calculate (estimate) next states value under the specified depth of search.  
+This is typical _performance vs. computational cost trade-off_, so optimal search depth for Connect 4 game would be **5**, since most human players usually think 5 moves in advance. This parameter can be set in game complexity: _Easy - 2, Medium - 5, Hard - 7_.  
 At hard level, computer will beat you most of the time :)
 
-_Evaluation function_ is the most important part of the algorithm, since most of the game states are calculated through this. There can be many different implementations, the one considered here prooved itself quite useful: Calculate all potential connected fours, threes, and twos for both players and substract them. Multiply results by specified weigths (potentially connected four is more valuable for victory than threes or twos )
+_Evaluation function_ is the most important part of the algorithm, since most of the game states are calculated through this. There can be many different implementations, the one considered here prooved itself quite useful: Calculate all potential connected fours, threes, and twos for both players and substract them. Multiply results by specified weigths (potentially connected four is more valuable for victory than threes or twos ).
 
 ```javascript
 const EVAL_WEIGHTS = {
