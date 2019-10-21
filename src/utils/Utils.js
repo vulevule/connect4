@@ -5,12 +5,15 @@ export function checkVertical(board, size = 4) {
     for (let c = 0; c < width; c++) {
       if (board[r][c]) {
         let count = 1;
+        let tokens = [[r, c]];
         for (let e = 1; e < size; e++) {
           if (board[r][c] === board[r - e][c]) {
             count++;
-            if (count >= size) return board[r][c];
+            tokens.push([r - e, c]);
+            if (count >= size) return [board[r][c], tokens];
           } else {
             count = 0;
+            tokens = [[r, c]];
           }
         }
 
@@ -33,12 +36,15 @@ export function checkHorizontal(board, size = 4) {
     for (let c = 0; c < size; c++) {
       if (board[r][c]) {
         let count = 1;
+        let tokens = [[r, c]];
         for (let e = 1; e < size; e++) {
           if (board[r][c] === board[r][c + e]) {
             count++;
-            if (count >= size) return board[r][c];
+            tokens.push([r, c + e]);
+            if (count >= size) return [board[r][c], tokens];
           } else {
             count = 0;
+            tokens = [[r, c]];
           }
         }
 
@@ -61,12 +67,15 @@ export function checkDiagonalRight(board, size = 4) {
     for (let c = 0; c < size; c++) {
       if (board[r][c]) {
         let count = 1;
+        let tokens = [[r, c]];
         for (let e = 1; e < size; e++) {
           if (board[r][c] === board[r - e][c + e]) {
             count++;
-            if (count >= size) return board[r][c];
+            tokens.push([r - e, c + e]);
+            if (count >= size) return [board[r][c], tokens];
           } else {
             count = 0;
+            tokens = [[r, c]];
           }
         }
 
@@ -89,12 +98,15 @@ export function checkDiagonalLeft(board, size = 4) {
     for (let c = size - 1; c < width; c++) {
       if (board[r][c]) {
         let count = 1;
+        let tokens = [[r, c]];
         for (let e = 1; e < size; e++) {
           if (board[r][c] === board[r - e][c - e]) {
             count++;
-            if (count >= size) return board[r][c];
+            tokens.push([r - e, c - e]);
+            if (count >= size) return [board[r][c], tokens];
           } else {
             count = 0;
+            tokens = [[r, c]];
           }
         }
 
@@ -133,10 +145,14 @@ export function checkAll(board, size = 4) {
 }
 
 export function evaluationCheck(board, size = 4) {
+  let checkedDL = checkDiagonalLeft(board, size);
+  let checkedDR = checkDiagonalRight(board, size);
+  let checkedH = checkHorizontal(board, size);
+
   return (
-    checkDiagonalRight(board, size) ||
-    checkDiagonalLeft(board, size) ||
-    checkHorizontal(board, size)
+    (checkedDL && checkedDL[0]) ||
+    (checkedDR && checkedDR[0]) ||
+    (checkedH && checkedH[0])
   );
 }
 

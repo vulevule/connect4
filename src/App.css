@@ -37,7 +37,8 @@ table {
   align-items: center;
 }
 
-.tableLoading {
+.tableLoading,
+.notConnected {
   opacity: 0.3;
 }
 
@@ -54,6 +55,12 @@ table {
   justify-content: center;
   align-items: center;
   cursor: pointer;
+}
+
+.connected {
+  background-color: #3bbb00 !important;
+  opacity: 1;
+  /* border: 5px solid #3ab800; */
 }
 
 .circle {

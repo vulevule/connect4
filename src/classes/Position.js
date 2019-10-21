@@ -14,7 +14,8 @@ export default class Position {
     for (let r = heigth - 1; r >= 0; r--) {
       if (!board[r][c]) {
         board[r][c] = currentPlayer;
-        return currentPlayer === checkAll(board);
+        let checked = checkAll(board);
+        return checked && currentPlayer === checked[0];
       }
     }
   };

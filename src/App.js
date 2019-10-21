@@ -21,6 +21,7 @@ export default class App extends Component {
       player2: -1,
       currentPlayer: null,
       board: [],
+      connected: [],
       gameOver: false,
       message: "",
       depth: 2
@@ -49,6 +50,7 @@ export default class App extends Component {
 
     this.setState({
       board,
+      connected: [],
       currentPlayer: initialPlayer,
       gameOver: false,
       message: ""
@@ -131,16 +133,18 @@ export default class App extends Component {
 
       // Check status of board
       let result = checkAll(board);
-      if (result === player1) {
+      if (result && result[0] === player1) {
         this.setState({
           board,
+          connected: result[1],
           gameOver: true,
           currentPlayer: null
         });
         ToastsStore.success("You won!");
-      } else if (result === player2) {
+      } else if (result && result[0] === player2) {
         this.setState({
           board,
+          connected: result[1],
           gameOver: true,
           currentPlayer: null
         });
@@ -169,7 +173,8 @@ export default class App extends Component {
       depth,
       currentPlayer,
       player1,
-      player2
+      player2,
+      connected
     } = this.state;
     return (
       <div>
@@ -182,7 +187,7 @@ export default class App extends Component {
             name="depth"
             type="radio"
           ></input>
-          <label>Easy</label>
+          <label> Easy </label>
           <input
             value={MEDIUM}
             onChange={this.handleDepthChange}
@@ -190,7 +195,7 @@ export default class App extends Component {
             name="depth"
             type="radio"
           ></input>
-          <label>Medium</label>
+          <label> Medium </label>
           <input
             value={HARD}
             onChange={this.handleDepthChange}
@@ -198,12 +203,13 @@ export default class App extends Component {
             name="depth"
             type="radio"
           ></input>
-          <label>Hard</label>
+          <label> Hard </label>
         </p>
         <p className="note">
           <b>*Note:</b> Greater complexity requires more time to calculate AI's
-          best move. First player will be randomly selected.
+          best move.
         </p>
+        <p className="note">First player will be randomly selected. You are the red player.</p>
         <div
           className="button"
           onClick={() => {
@@ -227,7 +233,14 @@ export default class App extends Component {
             <thead></thead>
             <tbody>
               {board.map((row, i) => (
-                <Row key={i} row={row} play={this.playHuman} />
+                <Row
+                  key={i}
+                  rowIndex={i}
+                  row={row}
+                  play={this.playHuman}
+                  tokens={connected}
+                  gameOver={gameOver}
+                />
               ))}
             </tbody>
           </table>
@@ -251,17 +264,26 @@ export default class App extends Component {
   };
 }
 
-const Row = ({ row, play }) => {
+const Row = ({ rowIndex, row, play, tokens, gameOver }) => {
   return (
     <tr>
       {row.map((cell, i) => (
-        <Cell key={i} value={cell} columnIndex={i} play={play} />
+        <Cell
+          key={i}
+          value={cell}
+          columnIndex={i}
+          play={play}
+          connected={tokens.some(a =>
+            [rowIndex, i].every((v, i) => v === a[i])
+          )}
+          gameOver={gameOver}
+        />
       ))}
     </tr>
   );
 };
 
-const Cell = ({ value, columnIndex, play }) => {
+const Cell = ({ value, columnIndex, play, connected, gameOver }) => {
   let color = "white";
   if (value === 1) {
     color = "red";
@@ -272,7 +294,9 @@ const Cell = ({ value, columnIndex, play }) => {
   return (
     <td>
       <div
-        className="cell"
+        className={`cell ${
+          gameOver ? (connected ? "connected" : "notConnected") : ""
+        }`}
         onClick={() => {
           play(columnIndex);
         }}
