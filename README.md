@@ -1,6 +1,6 @@
 # Connect 4 game with AI
 
-Connect 4 interactive game with AI heuristics for playing against the computer. Whole aplication is written in React.js.
+Connect 4 interactive game with AI heuristics for playing against the computer. Whole application is written in React.js.
 
 ## Instalation
 
