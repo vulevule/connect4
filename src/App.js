@@ -178,6 +178,7 @@ export default class App extends Component {
     } = this.state;
     return (
       <div>
+        <h1>Connect 4</h1>
         <p className="message">
           Game complexity:{" "}
           <input
@@ -209,7 +210,9 @@ export default class App extends Component {
           <b>*Note:</b> Greater complexity requires more time to calculate AI's
           best move.
         </p>
-        <p className="note">First player will be randomly selected. You are the red player.</p>
+        <p className="note">
+          First player will be randomly selected. You are the red player.
+        </p>
         <div
           className="button"
           onClick={() => {
